@@ -69,7 +69,7 @@ jobs:
             pkg-config libx11-dev libxext-dev libxrandr-dev libxcursor-dev \
             libxi-dev libxinerama-dev libxxf86vm-dev libwayland-dev libxkbcommon-dev \
             libasound2-dev libpulse-dev libaudio-dev libjack-dev libsamplerate0-dev \
-            libgbm-dev libegl1-mesa-dev libgles2-mesa-dev libgl1-mesa-dev libglu1-mesa-dev
+            libgbm-dev libegl1-mesa-dev libgles2-mesa-dev libgl1-mesa-dev libglu1-mesa-dev meson
           
           wget -q -O sdl.tar.gz https://github.com/libsdl-org/SDL/archive/refs/tags/release-2.30.2.tar.gz
           tar -xzf sdl.tar.gz
@@ -130,7 +130,8 @@ jobs:
           libfuse2 \
           build-essential \
           make \
-          patchelf
+          patchelf \
+          meson
 
     - name: Build SDL library (if needed)
       run: |
