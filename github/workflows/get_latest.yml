@@ -1,0 +1,57 @@
+name: Download and Unzip
+
+on:
+  workflow_dispatch:
+
+jobs:
+  download-unzip:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Download and extract zip file
+      run: |
+        # Replace with your actual URL
+        curl -L -o temp.zip "https://github.com/PortsMaster/PortMaster-New/releases/download/2025-10-04_1030/manicminer.zip"
+        rm -rf latest
+        mkdir latest
+        pwd
+        unzip -q temp.zip -d latest/
+        ls -ltr latest/
+        rm temp.zip
+
+    - name: To port.json v4
+      run: |
+        jq '
+        .version = 4 |
+        .items_opt = [] |
+        .attr |= {
+          title: .title,
+          porter: .porter,
+          desc: .desc,
+          desc_md: null,
+          inst: .inst,
+          inst_md: null,
+          genres: .genres,
+          image: null,
+          rtr: .rtr,
+          exp: .exp,
+          runtime: .runtime,
+          store: [],
+          availability: "",
+          reqs: .reqs,
+          arch: .arch,
+          min_glibc: ""
+        }
+        ' latest/manicminer/port.json > latest/manicminer/port_temp.json && mv latest/manicminer/port_temp.json latest/manicminer/port.json
+
+    - name: Commit changes
+      run: |
+        git config user.email "tim@monkeyx.net"
+        git config user.name "monkeyx-net"
+        git status
+        git add latest/
+        git add latest/manicminer/
+        git commit -m "Update latest folder" || exit 0
+        git push
