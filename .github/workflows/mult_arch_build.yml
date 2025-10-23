@@ -82,7 +82,7 @@ jobs:
           make install
           cd ../..
           
-          make
+          mkdir build && cd build && meson setup . .. && meson compile
           mkdir -p dist
           cp $game dist/${game}-aarch64
           strip dist/${game}-aarch64
@@ -159,7 +159,7 @@ jobs:
 
     - name: Build ${{ needs.build-arm64.outputs.game_name }}
       run: |
-        mkdir build && cd build && meson setup . .. && meson compile
+        make
 
     - name: Download ARM64 artifact
       uses: actions/download-artifact@v4
